@@ -1,0 +1,20 @@
+{
+  "obsidian-excalidraw-plugin:save": [],
+  "paste-latex:paste-display-latex": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": " "
+    }
+  ],
+  "paste-latex:paste-inline-latex": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": " "
+    }
+  ]
+}
