@@ -41,3 +41,52 @@
                     ▼             ▼
                 Gather A       Gather B
 ```
+
+
+DP
+```
+          GPU 0                         GPU 1
+     ┌─────────────┐               ┌─────────────┐
+     │ 5B weights  │               │ 5B weights  │
+     │ Adam state  │               │ Adam state  │
+     └──────┬──────┘               └──────┬──────┘
+            │                              │
+          batch A                        batch B
+            │                              │
+         backward                       backward
+            │                              │
+        gradient A                     gradient B
+            │                              │
+            └────────── ALL-REDUCE ────────┘
+                         │
+                   averaged gradient
+                         │
+                  ┌──────┴──────┐
+                  ↓             ↓
+              optimizer     optimizer
+                  ↓             ↓
+             same W_new      same W_new
+```
+
+FSDP
+```
+                  ONE LOGICAL MODEL
+                         │
+        ┌────────────────┼────────────────┐
+        ↓                ↓                ↓
+      Layer 1          Layer 2          Layer 3
+        │                │                │
+        ↓                ↓                ↓
+    all-gather        all-gather        all-gather
+        │                │                │
+        ↓                ↓                ↓
+    full L1           full L2           full L3
+   temporarily       temporarily       temporarily
+        │                │                │
+        ↓                ↓                ↓
+     compute           compute           compute
+        │                │                │
+        ↓                ↓                ↓
+      reshard          reshard          reshard
+```
+	
