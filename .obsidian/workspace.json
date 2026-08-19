@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "6cd8b7d4a5e27437",
+        "id": "676d8ac58e054bf6",
         "type": "tabs",
         "children": [
           {
-            "id": "ee85c12a1231091c",
+            "id": "5d9920b51bc881aa",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "FSDP.md",
+                "file": "FSDP History.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "FSDP"
+              "title": "FSDP History"
             }
           }
         ]
@@ -198,16 +198,23 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "ee85c12a1231091c",
+  "active": "5d9920b51bc881aa",
   "lastOpenFiles": [
+    "5. Training.md",
+    "Data Parallelism.md",
+    "Untitled.md",
+    "Critical batch size for v6e.md",
+    "Why Transpose things in backward pass.md",
+    "Notations.md",
+    "Formulas.md",
+    "3. Sharding.md",
+    "FSDP History.md",
     "2. TPU.md",
     "1. Rooflines.md",
-    "Formulas.md",
-    "Roofline Visual.md",
+    "SHARdyyyyyyyy.md",
     "FSDP Visual.md",
     "FSDP.md",
-    "SHARdyyyyyyyy.md",
-    "3. Sharding.md",
+    "Roofline Visual.md",
     "Network BS.md",
     "TPU Symphony.md",
     "Single TPU Chip Architecture.md",
