@@ -5,10 +5,10 @@
    Model parameters are sharded 1/4 across TPUs
 
  Notation:
-   W0,W1,W2,W3  = parameter shards
-   G0,G1,G2,G3  = gradient shards
-   X0,X1,X2,X3  = batch shards
-   OS0,OS1,OS2,OS3 = optimizer-state shards
+   - W0,W1,W2,W3  = parameter shards
+   - G0,G1,G2,G3  = gradient shards
+   - X0,X1,X2,X3  = batch shards
+   - OS0,OS1,OS2,OS3 = optimizer-state shards
 
 
 
@@ -109,13 +109,14 @@
 
  This is still DATA PARALLELISM:
 
+```
        different data
              +
        same parameters
+```
 
 
  IMPORTANT:
-
  The complete W does NOT need to remain resident after
  this layer's computation.
 
@@ -124,16 +125,20 @@
 
  After the layer's computation:
 
+```
    full W on every TPU
               |
               v
        discard full W
+```
 
  Back to:
 
-   TPU 0             TPU 1             TPU 2             TPU 3
-   -------            -------            -------            -------
+```
+   TPU 0             TPU 1               TPU 2             TPU 3
+   -------           -------            -------            -------
    W0                 W1                 W2                 W3
+```
 
  This is where FSDP gets its memory advantage.
 
@@ -142,6 +147,7 @@
 
  Layer L+1:
 
+```
        sharded W
             |
             v
@@ -155,15 +161,19 @@
             |
             v
        discard full W
+```
 
  And so on...
 
 
+```
  COMMUNICATION IS PIPELINED
  --------------------------
+```
 
  Ideally, we don't do:
 
+```
        compute Layer L
               |
               v
@@ -174,9 +184,11 @@
               |
               v
        compute Layer L+1
+```
 
  Instead:
 
+```
        Compute Layer L
        =============================>
 
@@ -185,6 +197,7 @@
 
        Compute Layer L+1
        =============================>
+```
 
  The communication for the next layer can overlap
  with computation of the current layer.
@@ -226,12 +239,14 @@
 
  Each TPU uses:
 
+```
        its local activation
               +
        full W
               +
        its local upstream gradient
 
+```
  to calculate its LOCAL contribution to the gradient.
 
 ```
@@ -409,4 +424,9 @@
 
 ---
 
-Reference: [[FSDP Visual]]
+## Related: [[FSDP Visual]] , [[FSDP Misc]]
+
+
+
+
+
