@@ -139,3 +139,22 @@ Therefore PP wants:
 
 > **many microbatches.**
 
+
+---
+---
+---
+
+## Example
+
+Relevant Candidates for 2048 Chips / 8 v6e pods :
+
+| Layout                       | ICI (within pod, 256-way)                                 | DCN (across pods, 8-way)     | Character                                                                          |
+| ---------------------------- | --------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------- |
+| Pure FSDP everywhere         | `ici_fsdp_parallelism=256`                                | `dcn_fsdp_parallelism=8`     | Single 2048-way FSDP shard; weights all-gathered even over DCN                     |
+| FSDP(ICI) + DP(DCN)          | `ici_fsdp_parallelism=256`                                | `dcn_data_parallelism=8`     | Classic "multi-slice" — full FSDP inside each pod, gradient all-reduce across pods |
+| FSDP+TP(ICI) + DP(DCN)       | `ici_fsdp_parallelism=64`, `ici_tensor_parallelism=4`     | `dcn_data_parallelism=8`     | Adds intra-layer TP to relax batch-size pressure                                   |
+| FSDP(ICI) + PP(DCN)          | `ici_fsdp_parallelism=256`                                | `dcn_pipeline_parallelism=8` | One pod = one pipeline stage; only activations cross DCN                           |
+| HSDP: DP+FSDP(ICI) + DP(DCN) | `ici_data_parallelism=k`, `ici_fsdp_parallelism=256/k`    | `dcn_data_parallelism=8`     | Partial replication within pod to shrink the FSDP group                            |
+| FSDP+CP(ICI) + DP(DCN)       | `ici_fsdp_parallelism=X`, `ici_context_parallelism=256/X` | `dcn_data_parallelism=8`     | For long-context variants (large `max_target_length`)                              |
+
+In this way, after calculating relevant candidates based on theory, we can get theoretical idea of top candidates based on our requirements and objectives. In the end, we can choose final layout from top candidates via empirical testing.
